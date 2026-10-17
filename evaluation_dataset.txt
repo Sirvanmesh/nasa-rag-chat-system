@@ -1,0 +1,61 @@
+# NASA Mission Intelligence - RAG evaluation test set
+#
+# Used by:  python ragas_evaluator.py --dataset evaluation_dataset.txt
+#
+# Format: one block per question, blocks separated by a line with "---".
+#   id:              short unique name
+#   category:        overview | emergency | disaster_analysis | crew | technical | timeline
+#   mission:         apollo_11 | apollo_13 | challenger | all  (used as the retrieval filter)
+#   question:        the question sent to the RAG system
+#   expected_answer: reference answer, written only from facts in data_text/
+#
+# Each expected answer was checked against the source files named in "evidence".
+
+id: a11_overview
+category: overview
+mission: apollo_11
+question: What was the primary objective of the Apollo 11 mission?
+expected_answer: The single primary objective of Apollo 11 was to perform a manned lunar landing and return safely to Earth. There were also 11 secondary objectives, such as selenological inspection and sampling and assessing the capabilities and limitations of a man and his equipment in the lunar environment. The primary objective was met.
+evidence: apollo11/NASA_NTRS_Archive_19710015566 (Mission Report, section 14)
+---
+id: a11_crew
+category: crew
+mission: apollo_11
+question: Who were the three crew members of Apollo 11 and what were their roles?
+expected_answer: The Apollo 11 crew was Commander Neil A. Armstrong, Command Module Pilot Michael Collins, and Lunar Module Pilot Edwin E. "Buzz" Aldrin Jr.
+evidence: apollo11/NASA_NTRS_Archive_19710015566 (crew photo caption)
+---
+id: a11_timeline
+category: timeline
+mission: apollo_11
+question: When did Apollo 11 launch, land on the Moon, and make first contact with the lunar surface?
+expected_answer: Apollo 11 was launched from Kennedy Space Center, Florida, at 8:32 a.m. e.s.t. on July 16, 1969. The lunar module landed in the Sea of Tranquility at 102:45:40 ground elapsed time on July 20, 1969. The Commander made first contact with the lunar surface at 109:24:15 g.e.t., which was 9:56:15 p.m. e.s.t. on July 20, 1969.
+evidence: apollo11/NASA_NTRS_Archive_19710015566 (Mission summary)
+---
+id: a13_emergency
+category: emergency
+mission: apollo_13
+question: What emergency did the Apollo 13 crew report, and what was the cause?
+expected_answer: The crew heard a pretty large bang with a caution and warning and reported "Houston, we've had a problem" together with a Main B bus undervolt. They then saw that they were venting something into space. Mission control described it as an apparent serious oxygen leak in the cryogenic oxygen in the service module, which took fuel cells off the line and forced the crew to power down the command module.
+evidence: apollo13/AS13_PAO, apollo13/AS13_TEC (air-to-ground transcript and Apollo Control commentary)
+---
+id: a13_technical
+category: technical
+mission: apollo_13
+question: How did the Apollo 13 crew deal with carbon dioxide removal while using the lunar module?
+expected_answer: The crew used the lunar module Aquarius as a lifeboat, so mission control worked out a procedure to use the command module's lithium hydroxide cartridges for CO2 removal in the lunar module. The crew built a CO2 "rig" by modifying a cartridge with plastic bags or covers, grey tape, and something like a sock to plug the bottom so that the air flowed through the cartridge.
+evidence: apollo13/AS13_PAO (lifeboat commentary and CO2 cartridge procedure)
+---
+id: challenger_disaster
+category: disaster_analysis
+mission: challenger
+question: What happened to Challenger during the ascent of mission STS-51L?
+expected_answer: About a minute into the flight, shortly after the three main engines throttled back up to 104 percent and the call "Challenger, go at throttle up", the public affairs officer said "Obviously a major malfunction". There was no downlink, and the flight dynamics officer reported that the vehicle had exploded. Contingency procedures were put into effect, and tracking reported the impact of the vehicle with the water about 18 miles downrange.
+evidence: challenger/108-AAG_STS-51L_Mission_Audio_transcript
+---
+id: challenger_crew
+category: crew
+mission: challenger
+question: Who were the crew members of Challenger mission STS-51L?
+expected_answer: The STS-51L crew was commander Francis "Dick" Scobee, pilot Michael Smith, mission specialists Judith Resnik, Ellison Onizuka and Ronald McNair, payload specialist Gregory Jarvis, and teacher in space participant Christa McAuliffe.
+evidence: challenger/107-AAG_STS-51L_Mission_Audio_transcript (the transcript spells some names phonetically, for example "Scobie" and "Krista")
