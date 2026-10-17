@@ -18,6 +18,3 @@ chroma_db*/
 Thumbs.db
 .vscode/
 .idea/
-
-# Browser test output (may contain page data)
-.playwright-mcp/
