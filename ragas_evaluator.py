@@ -114,9 +114,9 @@ def build_metrics(with_reference: bool) -> list:
 def validate_inputs(question: str, answer: str, contexts: List[str]) -> Optional[str]:
     """Return an error message for bad input, or None when the input is valid."""
     if not isinstance(question, str) or not question.strip():
-        return "Question is empty."
+        return "Question must be a non-empty string."
     if not isinstance(answer, str) or not answer.strip():
-        return "Answer is empty."
+        return "Answer must be a non-empty string."
     if answer.startswith("Error generating response"):
         return "Answer is an error message, so it cannot be evaluated."
     if not isinstance(contexts, (list, tuple)):
@@ -133,7 +133,7 @@ def evaluate_response_quality(question: str, answer: str, contexts: List[str],
     Args:
         question: The user's question.
         answer: The generated answer.
-        contexts: The retrieved context chunks the answer was based on.
+        contexts: The retrieved context chunks the answer was based on (a list, or one string).
         reference: Optional expected answer. Enables context_precision, bleu and rouge_l.
 
     Returns:
@@ -144,6 +144,10 @@ def evaluate_response_quality(question: str, answer: str, contexts: List[str],
     """
     if not RAGAS_AVAILABLE:
         return {"error": "RAGAS not available"}
+
+    # Accept a single context string as well as a list of chunks.
+    if isinstance(contexts, str):
+        contexts = [contexts]
 
     error = validate_inputs(question, answer, contexts)
     if error:
@@ -313,15 +317,21 @@ def main():
     if not RAGAS_AVAILABLE:
         raise SystemExit("RAGAS is not installed. Run: pip install -r requirements.txt")
 
-    run_batch_evaluation(
-        dataset_path=Path(args.dataset),
-        chroma_dir=args.chroma_dir,
-        collection_name=args.collection_name,
-        top_k=args.top_k,
-        model=args.model,
-        use_mission_filter=not args.no_mission_filter,
-        results_path=Path(args.output),
-    )
+    if args.top_k < 1:
+        parser.error("--top-k must be at least 1")
+
+    try:
+        run_batch_evaluation(
+            dataset_path=Path(args.dataset),
+            chroma_dir=args.chroma_dir,
+            collection_name=args.collection_name,
+            top_k=args.top_k,
+            model=args.model,
+            use_mission_filter=not args.no_mission_filter,
+            results_path=Path(args.output),
+        )
+    except (FileNotFoundError, ValueError, RuntimeError) as exc:
+        raise SystemExit(f"Batch evaluation stopped: {exc}")
 
 
 if __name__ == "__main__":
