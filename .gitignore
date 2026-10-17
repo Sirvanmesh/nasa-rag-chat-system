@@ -1,0 +1,21 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ChromaDB data (rebuild with embedding_pipeline.py)
+chroma_db*/
+
+# Logs and generated output
+*.log
+evaluation_results*.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
